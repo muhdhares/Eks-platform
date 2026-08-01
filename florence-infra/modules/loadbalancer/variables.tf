@@ -59,6 +59,19 @@ variable "target_groups" {
   }))
 }
 
+variable "alb_config" {
+  description = "Application Load Balancer configuration"
+
+  type = object({
+    idle_timeout               = number
+    enable_deletion_protection = bool
+    enable_http2               = bool
+    drop_invalid_header_fields = bool
+    desync_mitigation_mode     = string
+    ip_address_type            = string
+  })
+}
+
 variable "metadata" {
   description = "Metadata for the AWS resources"
   type = object({
