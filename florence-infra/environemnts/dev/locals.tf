@@ -50,42 +50,6 @@ locals {
 
   }
 
-  instance_config = {
-    frontend = {
-      instance_type    = "t3.micro"
-      root_volume_size = 8
-      root_volume_type = "gp3"
-      desired_capacity = 2
-      min_size         = 2
-      max_size         = 2
-      application_port = 3000
-      userdata         = <<EOF
-      #!/bin/bash
-      yum update -y
-      yum install -y httpd
-      systemctl start httpd
-      systemctl enable httpd
-    EOF
-    }
-
-    backend = {
-      instance_type    = "t3.micro"
-      root_volume_size = 8
-      root_volume_type = "gp3"
-      desired_capacity = 2
-      min_size         = 2
-      max_size         = 2
-      application_port = 3000
-      userdata         = <<EOF
-      #!/bin/bash
-      yum update -y
-      yum install -y nginx
-      systemctl start nginx
-      systemctl enable nginx
-    EOF
-    }
-  }
-
   common_tags = merge(var.common_tags,
     {
       Project     = var.project_name

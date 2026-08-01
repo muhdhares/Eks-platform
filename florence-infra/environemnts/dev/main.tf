@@ -15,18 +15,3 @@ module "vpc" {
 }
 
 
-module "compute" {
-  source = "../../modules/compute"
-  providers = {
-    aws = aws
-  }
-  project_name    = var.project_name
-  environment     = var.environment
-  aws_region      = var.aws_region
-  vpc_id          = module.vpc.vpc_id
-  instance_config = local.instance_config
-  app_sg_id       = module.vpc.security_groups_id.app
-  app_subnet_ids  = values(module.vpc.app_subnet_ids)
-  metadata        = var.metadata
-  common_tags     = local.common_tags
-}
