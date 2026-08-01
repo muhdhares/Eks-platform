@@ -8,7 +8,7 @@ resource "aws_vpc" "this" {
 
   tags = merge(local.common_tags,
     {
-      Names = local.names.vpc
+      Name = local.names.vpc
     }
   )
 }

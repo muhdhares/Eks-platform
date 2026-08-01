@@ -35,7 +35,7 @@ locals {
   # Availability Zone Lookup
   subnet_az = {
     for name, subnet in var.subnets :
-    name => subnet.availability_zone
+    name => subnet.az_index
   }
 
   # CIDR Collections

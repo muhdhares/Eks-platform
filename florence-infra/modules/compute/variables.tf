@@ -17,79 +17,35 @@ variable "aws_region" {
   type        = string
 }
 
-variable "vpc_cidr" {
-  description = "Main CIDR Block for the VPC"
+variable "vpc_id" {
   type        = string
-  validation {
-    condition     = can(cidrhost(var.vpc_cidr, 0))
-    error_message = "vpc_cidr must be a valid CIDR block."
-  }
+  description = "VPC ID"
 }
 
-variable "instance_tenancy" {
-  description = "Instance tenancy for the VPC"
-  type        = string
-  default     = "default"
-  validation {
-    condition = contains(
-      ["default", "dedicated"],
-      var.instance_tenancy
-    )
-
-    error_message = "instance_tenancy must be 'default' or 'dedicated'."
-  }
-}
-
-variable "dns_support" {
-  description = "Enable DNS resolution"
-  type        = bool
-  default     = true
-}
-
-variable "dns_hostnames" {
-  description = "Enable DNS Hostnames"
-  type        = bool
-  default     = true
-}
-
-variable "availability_zones" {
-  description = "Availability zones used by the networking module"
+variable "app_subnet_ids" {
+  description = "The IDs of the application subnets"
   type        = list(string)
-  validation {
-    condition     = length(var.availability_zones) >= 2
-    error_message = "At least two AZs are required"
-  }
 }
 
-variable "nat_gateway" {
-  description = "NAT Gateway configuration"
-
-  type = object({
-    enabled    = bool
-    single_nat = bool
-  })
-
-  default = {
-    enabled    = true
-    single_nat = true
-  }
+variable "app_sg_id" {
+  description = "Security group id of application"
+  type        = string
 }
 
-variable "assign_generated_ipv6_cidr_block" {
-  description = "Assign an AWS-generated IPv6 CIDR block."
-  type        = bool
-  default     = false
-}
-
-variable "subnets" {
-  description = "Subnets used in the networking module"
+variable "instance_config" {
+  description = "Configuration for Instance"
   type = map(object({
-    cidr_block    = string
-    az_index      = number
-    type          = string
-    map_public_ip = bool
+    instance_type    = string
+    root_volume_size = number
+    root_volume_type = string
+    desired_capacity = number
+    min_size         = number
+    max_size         = number
+    application_port = number
+    userdata         = string
   }))
 }
+
 
 variable "metadata" {
   description = "Metadata for the AWS resources"
@@ -99,10 +55,6 @@ variable "metadata" {
   })
 }
 
-variable "db_port" {
-  description = "Database Port to be used"
-  type        = number
-}
 
 variable "common_tags" {
   description = "Additional tags applied to all resources."
